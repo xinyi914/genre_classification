@@ -44,7 +44,7 @@ def go(args):
         y,
         test_size=args.val_size,
         stratify=df[args.stratify] if args.stratify != "null" else None,
-        random_state=args.random_seed,
+        random_state=args.random_seed
     )
 
     logger.info("Setting up pipeline")
@@ -89,7 +89,7 @@ def go(args):
     disp.plot(
         ax=sub_cm,
         values_format=".1f",
-        xticks_rotation=90,
+        xticks_rotation=90
     )
 
     fig_cm.tight_layout()
@@ -97,7 +97,7 @@ def go(args):
     run.log(
         {
             "feature_importance": wandb.Image(fig_feat_imp),
-            "confusion_matrix": wandb.Image(fig_cm),
+            "confusion_matrix": wandb.Image(fig_cm)
         }
     )
 
@@ -118,13 +118,13 @@ def export_model(run, pipe, used_columns, X_val, val_pred, export_artifact):
             export_path,
             serialization_format=mlflow.sklearn.SERIALIZATION_FORMAT_CLOUDPICKLE,
             signature=signature,
-            input_example=X_val.iloc[:2],
+            input_example=X_val.iloc[:2]
         )
 
         artifact = wandb.Artifact(
             export_artifact,
             type="model_export",
-            description="Random Forest pipeline export",
+            description="Random Forest pipeline export"
         )
         artifact.add_dir(export_path)
 
@@ -190,7 +190,7 @@ def get_training_inference_pipeline(args):
         reshape_to_1d,
         TfidfVectorizer(
             binary=True, max_features=model_config["tfidf"]["max_features"]
-        ),
+        )
     )
     # Put the 3 tracks together into one pipeline using the ColumnTransformer
     # This also drops the columns that we are not explicitly transforming
@@ -200,7 +200,7 @@ def get_training_inference_pipeline(args):
             ("cat", categorical_transformer, categorical_features),
             ("nlp1", nlp_transformer, nlp_features),
         ],
-        remainder="drop",  # This drops the columns that we do not transform
+        remainder="drop"  # This drops the columns that we do not transform
     )
 
     # Get a list of the columns we used
@@ -211,7 +211,7 @@ def get_training_inference_pipeline(args):
     pipe = Pipeline(
         steps=[
             ("preprocessor", preprocessor),
-            ("classifier", RandomForestClassifier(**model_config["random_forest"])),
+            ("classifier", RandomForestClassifier(**model_config["random_forest"]))
         ]
     )
     return pipe, used_columns

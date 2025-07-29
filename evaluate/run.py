@@ -6,7 +6,7 @@ import pandas as pd
 import wandb
 import mlflow.sklearn
 import matplotlib.pyplot as plt
-from sklearn.metrics import roc_auc_score, plot_confusion_matrix
+from sklearn.metrics import roc_auc_score, ConfusionMatrixDisplay
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
@@ -40,14 +40,14 @@ def go(args):
 
     logger.info("Computing confusion matrix")
     fig_cm, sub_cm = plt.subplots(figsize=(10, 10))
-    plot_confusion_matrix(
+    ConfusionMatrixDisplay.from_estimator(
         pipe,
         X_test[used_columns],
         y_test,
         ax=sub_cm,
         normalize="true",
         values_format=".1f",
-        xticks_rotation=90,
+        xticks_rotation=90
     )
     fig_cm.tight_layout()
 
@@ -61,21 +61,21 @@ def go(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Test the provided model on the test artifact",
-        fromfile_prefix_chars="@",
+        fromfile_prefix_chars="@"
     )
 
     parser.add_argument(
         "--model_export",
         type=str,
         help="Fully-qualified artifact name for the exported model to evaluate",
-        required=True,
+        required=True
     )
 
     parser.add_argument(
         "--test_data",
         type=str,
         help="Fully-qualified artifact name for the test data",
-        required=True,
+        required=True
     )
 
     args = parser.parse_args()

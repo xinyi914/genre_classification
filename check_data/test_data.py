@@ -53,7 +53,7 @@ def test_class_names(data):
         "psytrance",
         "trap",
         "dnb",
-        "hardstyle",
+        "hardstyle"
     ]
 
     assert data["genre"].isin(known_classes).all()
@@ -76,7 +76,7 @@ def test_column_ranges(data):
         "liveness": (0, 1),
         "valence": (0, 1),
         "tempo": (50, 250),
-        "duration_ms": (20000, 1000000),
+        "duration_ms": (20000, 1000000)
     }
 
     for col_name, (minimum, maximum) in ranges.items():
@@ -111,7 +111,7 @@ def test_kolmogorov_smirnov(data, ks_alpha):
 
     for col in columns:
 
-        ts, p_value = scipy.stats.ks_2samp(sample1[col], sample2[col])
+        ts, p_value = scipy.stats.ks_2samp(sample1[col].dropna(), sample2[col].dropna())
 
         # NOTE: as always, the p-value should be interpreted as the probability of
         # obtaining a test statistic (TS) equal or more extreme that the one we got
